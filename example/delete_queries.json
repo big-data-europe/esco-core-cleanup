@@ -1,0 +1,16 @@
+{
+    "queries": {
+        "validations": [
+            "delete { ?collection ?a ?b. } where { ?collection a mu:validationResultCollection ; ?a ?b. filter not exists{?collection mu:timestamp 'change_the_date'^^xsd:dateTime} }",
+            "delete { ?result ?a ?b. } where { ?result a mu:validationResult; ?a ?b. filter not exists{?randomCollection mu:hasResult ?result.} }"
+        ],
+        "import": [
+            "delete { ?collection ?a ?b. } where { ?collection a mu:validationResultCollection ; ?a ?b; mu:Graph ?c. }",
+            "delete { ?result ?a ?b. } where { ?result a mu:validationResult ; ?a ?b. filter not exists{?randomCollection mu:hasResult ?result.} }",
+            "delete { ?graph ?a ?b. } where { ?graph a esco:Graph ; ?a ?b. }"
+        ],
+        "creation": [
+            "delete{?a ?b ?concept. ?concept ?a1 ?a2 } where{ ?concept a <http://www.w3.org/2004/02/skos/core#Concept>; <http://mu.semte.ch/vocabularies/core/isUnderCreation> ?iuc; ?a1 ?a2. optional {?a ?b ?concept}}"
+        ]
+    }
+}

@@ -1,0 +1,62 @@
+swagger: "2.0"
+info:
+  description: This microservice will run delete queries on the database. The queries are defined in a json configuration file.
+  version: 1.0.0
+  title: Clean Up
+  contact:
+    email: nora.szepes@tenforce.com
+basePath: /
+schemes:
+- http
+paths:
+  /cleanup/clean:
+    delete:
+      tags:
+      - run
+      summary: Clean database
+      description: "Triggers the microservice to run specified delete queries. The specified queries are set in a parameter."
+      produces:
+      - application/json
+      parameters:
+      - name: keys
+        in: query
+        description: A string containing all needed delete query keys separated by commas.
+        required: true
+        type: string
+      responses:
+        400:
+          schema:
+            $ref: '#/definitions/Error'
+          description: Missing or empty delete parameter
+        200:
+          schema:
+            $ref: '#/definitions/Status'
+          description:  Response on success
+
+
+definitions:
+  Status:
+    type: object
+    description: A status message.
+    properties:
+      status:
+        type: string
+        description:  A short status message to indicate that the call was succesful. It says whihch data was deleted.
+    example:
+      status: "Validation data was deleted"
+  Error:
+    type: object
+    description: Default error message.
+    properties:
+      errors:
+        type: array
+        description:  JSON API wrapper object.
+        items:
+          type: object
+          properties:
+            title:
+              type: string
+              description: Title of error.
+    example:
+      errors:
+        - title: Missing or empty 'delete' parameter
