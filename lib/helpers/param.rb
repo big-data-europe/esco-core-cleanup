@@ -18,8 +18,9 @@ module Helpers
 
         def handle_parameter(config, delete_params, graph_param)
             status_message = ''
+            queries = config.get_queries
             delete_params.each do |delete_param|
-                next unless config.include?(delete_param)
+                next unless queries.include?(delete_param)
                 clean(config, delete_param, graph_param)
                 status_message += delete_param.capitalize + ' data was deleted. '
             end

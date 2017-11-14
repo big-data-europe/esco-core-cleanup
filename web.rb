@@ -33,7 +33,8 @@ delete '/clean' do
 
     return_message = ''
     if delete_params && !delete_params.empty?
-        return_message = handle_parameter(config_handler.get_config, delete_params, graph_param)
+        config_handler.refresh_config
+        return_message = handle_parameter(config_handler, delete_params, graph_param)
     else
         error("Missing or empty 'delete' parameter", status = 400)
     end

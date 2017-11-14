@@ -13,9 +13,9 @@ module Helpers
         private
 
         def clean(config, delete_param, graph_param)
-            queries = config.fetch(delete_param)
+            queries = config.get_queries.fetch(delete_param)
             queries.each do |query|
-                do_update(query, graph_param)
+                do_update(config, query, graph_param)
             end
         end
 
@@ -57,18 +57,16 @@ module Helpers
         # Method to return basic prefixes
         ###
         private
-
-        def prefix
-            prefix = "prefix mu: <http://mu.semte.ch/vocabularies/core/>\n"
-            prefix += "prefix mp: <http://sem.tenforce.com/vocabularies/mapping-platform/>\n"
-            prefix += "prefix esco: <http://data.europa.eu/esco/model#>\n"
-            prefix += "prefix escolabelrole: <http://data.europa.eu/esco/LabelRole#>\n"
-            prefix += "prefix translation: <http://translation.escoportal.eu/>\n"
-            prefix += "prefix translationvocab: <http://translation.escoportal.eu/vocab/>\n"
-            prefix += "prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>\n"
-            prefix += "prefix skos: <http://www.w3.org/2004/02/skos/core#>\n\n"
-
-            prefix
+        def prefix(config)
+            if config.get_prefixes.empty?
+                prefixes = "PREFIX mu: <http://mu.semte.ch/vocabularies/core/>\n"
+            else
+              prefixes = ""
+              config.get_prefixes.each do |prefix|
+                  prefixes += prefix + "\n"
+              end
+            end
+            prefixes
         end
 
         ###
@@ -77,7 +75,7 @@ module Helpers
         private
 
         def graph
-            "with <http://mu.semte.ch/application>\n"
+            "WITH <http://mu.semte.ch/application>\n"
         end
 
         ###
@@ -89,10 +87,11 @@ module Helpers
 
         private
 
-        def do_update(query, graph_param)
+        def do_update(config, query, graph_param)
+            # We change the transaction level to avoid deadlocks for those queries
             query = change_time_in_query(query)
             query = change_graph_param(query, graph_param)
-            query = prefix + graph + query
+            query = prefix(config) + graph + query
             update(query)
         end
     end

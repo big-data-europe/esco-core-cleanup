@@ -4,7 +4,8 @@ class FileHandler
     # and fills it with data from the resource file
     ###
     def initialize
-        @config = {}
+        @queries = {}
+        @prefixes = {}
         @dir = ''
     end
 
@@ -12,8 +13,9 @@ class FileHandler
     # Reads the config.json config file and stores it in the @config variable
     ###
     def refresh_config
-        filepath = get_file_path('delete_queries.json')
-        @config = read_file(filepath, 'queries')
+        filepath = get_file_path('config.json')
+        @queries = read_file(filepath, 'queries') || {}
+        @prefixes = read_file(filepath, 'prefixes') || {}
     end
 
     ###
@@ -30,12 +32,19 @@ class FileHandler
     # Refreshes the value of the @config variable
     # and returns the copy of the @config variable
     ###
-    def get_config
-        refresh_config
-        @config.clone
+    def get_queries
+        @queries.clone
     end
 
-      ###
+    ###
+    # Refreshes the value of the @config variable
+    # and returns the copy of the @config variable
+    ###
+    def get_prefixes
+        @prefixes.clone
+    end
+
+    ###
     # Set the new dir variable
     ###
     def set_dir(new_dir)
@@ -49,7 +58,6 @@ class FileHandler
     # Returns relative path to resource file
     ###
     def get_file_path(filename)
-        # dir = File.realdirpath(File.join(File.dirname(__FILE__), '..', 'config'))
         File.join(@dir, filename)
     end
 end

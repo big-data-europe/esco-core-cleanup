@@ -12,17 +12,19 @@ The service uses one configuration file, config.json.
 
 ### prefixes
 
-The backend supports the following prefixes:
-
+The backend supports by default the following prefix:
 ```
 mu: <http://mu.semte.ch/vocabularies/core/>
-mp: <http://sem.tenforce.com/vocabularies/mapping-platform/>
-esco: <http://data.europa.eu/esco/model#>
-escolabelrole: <http://data.europa.eu/esco/LabelRole#>
-translation: <http://translation.escoportal.eu/>
-translationvocab: <http://translation.escoportal.eu/vocab/>
-skosxl: <http://www.w3.org/2008/05/skos-xl#>
-skos: <http://www.w3.org/2004/02/skos/core#>
+```
+
+However, you can specify your own prefixes (which will override the default one(s)) in the config.json file.
+```
+{
+    "queries": {
+        ...
+    },
+    "prefixes" : ["PREFIX mu: <http://mu.semte.ch/vocabularies/core/>", "PREFIX foo: <http://foo.bar/>"]
+}
 ```
 
 ### query options
